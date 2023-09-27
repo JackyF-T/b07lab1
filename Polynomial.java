@@ -16,11 +16,14 @@ public class Polynomial{
 	
 	public Polynomial add(Polynomial p1)
 	{	
-		int len = 0;
+		int len = this.exponent.length;
 		
-		for(int i=0; i<this.exponent.length; i++)
+		for(int i=0; i<p1.exponent.length; i++)
 		{
-			
+			for(int j=0; j<this.exponent.length; i++)
+			{
+				if(this.expone)
+			}
 		}
 
 		double [] temp = new double[len];
