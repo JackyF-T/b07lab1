@@ -1,5 +1,10 @@
 //lab 2 polynomial code
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.PrintStream;
+import java.util.Arrays;
 public class Polynomial{
 	double [] array;
 	int [] exponent;
@@ -13,53 +18,119 @@ public class Polynomial{
 		this.array = a1;
 		this.exponent = a2;
 	}
+
+	public Polynomial(File file) throws Exception{
+		BufferedReader b = new BufferedReader(new FileReader(file));
+		String line = b.readLine();
+		String[] terms = line.split("\\+");
+
+		this.array = new double[terms.length];
+    	this.exponent = new int[terms.length];
+
+		for (int i = 0; i < terms.length; i++) {
+			String term = terms[i];
+			String[] duo = term.split("x");
+			if(duo.length>=1){
+			this.array[i]=(Double.parseDouble(duo[0]));
+			this.exponent[i]=(Integer.parseInt(duo[1]));
+			}else{
+				this.array[i]=(Double.parseDouble(duo[0]));
+				this.exponent[i]=0;
+			}
+		}
+
+		b.close();
+
+
+	}
+
+
+	public void saveToFile(String fileName) throws Exception {
+
+		PrintStream output = new PrintStream(fileName);
+		StringBuilder polynomialString = new StringBuilder();
+
+		for(int i = 0; i<array.length;i++){
+			if (array[i] < 0 && polynomialString.length() > 0) {
+                polynomialString.append("-");
+            }
+            polynomialString.append(Math.abs(array[i]));
+            
+            
+            if (exponent[i] != 0) {
+                polynomialString.append("x");
+            }
+            
+            if (exponent[i] > 1) {
+                polynomialString.append(exponent[i]);
+            }
+            
+            if (i < array.length - 1) {
+                polynomialString.append("+");
+            }
+		}
+
+		output.println(polynomialString);
+		output.close();
+
+
+	}
 	
 	public Polynomial add(Polynomial p1)
 	{	
-		int len = this.exponent.length;
-		
-		for(int i=0; i<p1.exponent.length; i++)
-		{
-			for(int j=0; j<this.exponent.length; i++)
-			{
-				if(this.expone)
-			}
-		}
+		int maxSize = Math.max(Arrays.stream(this.exponent).max().getAsInt(), Arrays.stream(p1.exponent).max().getAsInt()) + 1;
 
-		double [] temp = new double[len];
-		double [] tempExp = new int[len];
-		
-		for(int i = 0; i<len; i++){
+		double [] temp = new double[maxSize];
+		int [] tempExp = new int[maxSize];
+ 		for (int i = 0; i < temp.length; i++) {
 			temp[i]=0.0;
 			tempExp[i]=0;
 		}
-		for(int i = 0; i<this.exponent.length; i++){
-			temp[i]+=this.array[i];
-			tempExp[i]+=this.exponent[i];
 
-		}
-		
-		
-		for(int i = 0; i<p1.exponent.length; i++){
-			for(int j=0;j<this.exponent.length; j++){
-				boolean sameExp=false;
-				if(this.exponent[j]==p1.exponent[i]){
-					this.array[j]+=p1.array[i];
-					sameExp = true;
-					break;
-				}
 
-			}
-		}
-		
+		 for (int i = 0; i < array.length; i++) {
+            temp[this.exponent[i]] += this.array[i];
+            tempExp[this.exponent[i]] = this.exponent[i];
+        }
+
+		for (int i = 0; i < p1.array.length; i++) {
+            temp[p1.exponent[i]] += p1.array[i];
+            tempExp[p1.exponent[i]] = p1.exponent[i];
+        }
+
 		return new Polynomial(temp, tempExp);
-		
 	}
+
+	public Polynomial multiply(Polynomial p1) {
+        int maxSize = Arrays.stream(this.exponent).max().getAsInt() + Arrays.stream(p1.exponent).max().getAsInt() + 1;
+        double[] temp = new double[maxSize];
+        int[] tempExp = new int[maxSize];
+
+ 		for (int i = 0; i < temp.length; i++) {
+			temp[i]=0.0;
+			tempExp[i]=0;
+		}
+
+
+		 for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < p1.array.length; j++) {
+                int exp = exponent[i] + p1.exponent[j];
+                temp[exp] += array[i] * p1.array[j];
+                tempExp[exp] = exp;
+            }
+        }
+
+
+
+
+		return new Polynomial(temp, tempExp);
+	}
+
 	
 	public double evaluate(double x){
 		double result = 0.0;
 		for(int i = 0; i<this.array.length; i++){
-			result += array[i]*(Math.pow(x, i));
+			result += array[i]*(Math.pow(x, exponent[i]));
 		}
 		return result;
 	}
