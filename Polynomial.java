@@ -98,7 +98,32 @@ public class Polynomial{
             tempExp[p1.exponent[i]] = p1.exponent[i];
         }
 
-		return new Polynomial(temp, tempExp);
+	
+
+		
+		int count = 0;
+
+		for(int i = 0; i<temp.length;i++)
+		{
+			if(temp[i]!=0){
+				count++;
+			}
+		}
+		double [] result = new double[count];
+		int [] resultExp = new int[count];
+		int count2 = 0;
+		for(int i = 0; i<temp.length;i++)
+		{
+			if(temp[i]!=0){
+				result[count2]=temp[i];
+				resultExp[count2]=tempExp[i];
+				count2++;
+			}
+
+		}
+
+
+		return new Polynomial(result, resultExp);
 	}
 
 	public Polynomial multiply(Polynomial p1) {
@@ -123,7 +148,29 @@ public class Polynomial{
 
 
 
-		return new Polynomial(temp, tempExp);
+		int count = 0;
+
+		for(int i = 0; i<temp.length;i++)
+		{
+			if(temp[i]!=0){
+				count++;
+			}
+		}
+		double [] result = new double[count];
+		int [] resultExp = new int[count];
+		int count2 = 0;
+		for(int i = 0; i<temp.length;i++)
+		{
+			if(temp[i]!=0){
+				result[count2]=temp[i];
+				resultExp[count2]=tempExp[i];
+				count2++;
+			}
+
+		}
+
+
+		return new Polynomial(result, resultExp);
 	}
 
 	
